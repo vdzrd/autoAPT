@@ -52,9 +52,9 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-uint8_t cmd1[] = "#010+10.000"; // Команда на ЦАП
-uint8_t cmd2[] = "#010+01.000"; // Вторая команда для ЦАП
-uint8_t report[] = "0"; // Ответ
+uint8_t cmd1[] = "#010+10.000"; // Make 10 amps
+uint8_t cmd2[] = "#010+01.000"; // Make 1 amp
+uint8_t report[] = "0"; // For message recieve
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -69,11 +69,11 @@ extern void initialise_monitor_handles(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) // Работа по ежесекундному прерыванию
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) // Working during interruption
 {
 	if (htim->Instance==TIM1) //check if the interrupt comes from TIM1
 	{
-		HAL_GPIO_TogglePin(Led_GPIO_Port, Led_Pin); // Мигнем светодиодом
+		HAL_GPIO_TogglePin(Led_GPIO_Port, Led_Pin); // Blink
 
 		if (HAL_UART_Transmit(&huart2, cmd2, 11, 0xFFFF) == HAL_OK)
 		{
@@ -119,8 +119,8 @@ int main(void)
   MX_TIM1_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  initialise_monitor_handles(); // Включаем обработку отладочных сообщений
-  HAL_TIM_Base_Start_IT(&htim1); // Запуск ежесекундного прерывания
+  initialise_monitor_handles(); // Turn on debug messages
+  HAL_TIM_Base_Start_IT(&htim1); // Turn on 1s period interruption
   printf("started\n");
   /* USER CODE END 2 */
 
